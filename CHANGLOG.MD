@@ -120,3 +120,38 @@ git branch
 ```
 
 Isso cria uma branch separada **dentro do mesmo repositório**. Se você deseja um projeto completamente separado, com outro repositório no GitHub, será necessário criar um novo repositório e alterar o `remote origin`.
+
+
+Vou verificar o seu `.gitignore` e o estado do Git para confirmar se a pasta `database` ou o arquivo `.db` estão sendo ignorados antes de indicar o comando correto.
+
+Read 
+
+O motivo foi encontrado: seu `.gitignore` contém `database/*.db`, então qualquer banco SQLite dentro dessa pasta fica fora do envio. Para um projeto de teste, você pode versionar o banco removendo essa regra e depois fazer commit na branch `add_sqlite`.
+
+Ran terminal command: Get-ChildItem database -Force; git status --short --ignored database
+
+O arquivo está sendo ignorado por esta linha do `.gitignore`:
+
+```gitignore
+database/*.db
+```
+
+Para enviar o banco nesta branch, use:
+
+```powershell
+git add -f database/porcoes.db
+git commit -m "Adiciona banco SQLite de teste"
+git push
+```
+
+A opção `-f` força o Git a adicionar o arquivo mesmo estando no `.gitignore`.
+
+Se quiser que todos os bancos futuros também sejam enviados, remova esta linha do `.gitignore` e execute:
+
+```powershell
+git add database/porcoes.db
+git commit -m "Adiciona banco SQLite de teste"
+git push
+```
+
+O comando `git push` enviará para a branch atual, que no seu caso é `add_sqlite`.
