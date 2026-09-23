@@ -32,3 +32,91 @@ git add .gitignore
 Isso remove os módulos apenas do Git, sem apagá-los do computador.
 
 Made changes.
+
+### Adicionar no repositorio GitHub
+#### …or create a new repository on the command line
+echo "# porcoes-projeto-curso-FDWM" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/talilotarlison/porcoes-projeto-curso-FDWM.git
+git push -u origin main
+
+
+#### …or push an existing repository from the command line
+git remote add origin https://github.com/talilotarlison/porcoes-projeto-curso-FDWM.git
+git branch -M main
+git push -u origin main
+
+
+`__dirname` representa o caminho absoluto da pasta onde está este arquivo:
+
+```text
+c:\Users\talil\Desktop\porcoes\model
+```
+
+Então:
+
+```javascript
+path.join(__dirname, '..', 'database', 'porcoes.db')
+```
+
+é interpretado assim:
+
+1. `__dirname`: pasta `model`
+2. `'..'`: volta uma pasta, para a raiz do projeto `porcoes`
+3. `'database'`: entra na pasta `database`
+4. `'porcoes.db'`: aponta para o arquivo do banco
+
+Resultado:
+
+```text
+c:\Users\talil\Desktop\porcoes\database\porcoes.db
+```
+
+A pasta não precisa ser informada manualmente porque `__dirname` já informa a localização do arquivo atual. O trecho:
+
+```javascript
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+```
+
+cria essa variável em projetos que usam ES Modules.
+
+A pasta `database` precisa existir previamente. O SQLite pode criar o arquivo `porcoes.db`, mas normalmente não cria automaticamente uma pasta inexistente.
+
+
+Você quer criar uma **nova branch** no GitHub para trabalhar separadamente no projeto. No terminal, dentro da pasta do projeto, execute:
+
+```bash
+git status
+git switch -c nome-da-nova-branch
+git add .
+git commit -m "Inicia nova branch"
+git push -u origin nome-da-nova-branch
+```
+
+Exemplo:
+
+```bash
+git switch -c desenvolvimento
+git add .
+git commit -m "Adiciona estrutura inicial"
+git push -u origin desenvolvimento
+```
+
+Depois disso, a branch `desenvolvimento` aparecerá no GitHub, separada da branch principal.
+
+Para voltar à branch principal:
+
+```bash
+git switch main
+```
+
+Para listar as branches:
+
+```bash
+git branch
+```
+
+Isso cria uma branch separada **dentro do mesmo repositório**. Se você deseja um projeto completamente separado, com outro repositório no GitHub, será necessário criar um novo repositório e alterar o `remote origin`.

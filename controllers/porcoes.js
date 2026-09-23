@@ -1,48 +1,52 @@
-import { randomUUID } from 'crypto';
-
-let minhasPorcoes = [];
+import {
+  createPorcao,
+  deletePorcao as removePorcao,
+  getPorcaoById,
+  listPorcoes,
+  updatePorcao as savePorcao
+} from '../model/porcoes.js';
 
 // lista todas as porções
-export const getPorcoes = (req, res) => {
-    res.status(200).json(minhasPorcoes);
+export const getPorcoes = async (req, res) => {
+  const porcoes = await listPorcoes();
+  res.status(200).json(porcoes);
+};
+
+// Permitir que o usuário busque uma porção pelo ID
+export const getPorcao = async (req, res) => {
+  const porcao = await getPorcaoById(req.params.id);
+
+  if (porcao) {
+    res.status(200).json(porcao);
+  } else {
+    res.status(404).json({ message: 'Porção não encontrada' });
+  }
 };
 
 // permitir que o usuário adicione uma nova porção
-export const addPorcao = (req, res) => {
-    const id = randomUUID();
-    const { nome, calorias, descricao } = req.body;
-    const novaPorcao = {
-        id: id,
-        nome: nome,
-        calorias: calorias,
-        descricao: descricao
-    };
-    
-    minhasPorcoes.push(novaPorcao);
-    res.status(201).json({ id, nome, calorias, descricao });
+export const addPorcao = async (req, res) => {
+  const novaPorcao = await createPorcao(req.body);
+  res.status(201).json(novaPorcao);
 };
 
 // atualizar uma porção existente
-export const updatePorcao = (req, res) => {
+export const updatePorcao = async (req, res) => {
   const id = req.params.id;
-  const { nome, calorias, descricao } = req.body;
-  const porcaoIndex = minhasPorcoes.findIndex(p => p.id === id);
+  const porcaoAtualizada = await savePorcao(id, req.body);
 
-  if (porcaoIndex !== -1) {
-    minhasPorcoes[porcaoIndex] = { ...minhasPorcoes[porcaoIndex], nome, calorias, descricao };
-    res.status(200).json(minhasPorcoes[porcaoIndex]);
+  if (porcaoAtualizada) {
+    res.status(200).json(porcaoAtualizada);
   } else {
     res.status(404).json({ message: 'Porção não encontrada' });
   }
 };
 
 // permitir que o usuário delete uma porção existente
-export const deletePorcao = (req, res) => {
+export const deletePorcao = async (req, res) => {
   const id = req.params.id;
-  const porcaoIndex = minhasPorcoes.findIndex(p => p.id === id);
+  const foiExcluida = await removePorcao(id);
 
-  if (porcaoIndex !== -1) {
-    minhasPorcoes.splice(porcaoIndex, 1);
+  if (foiExcluida) {
     res.status(200).json({ message: 'Porção deletada com sucesso' });
   } else {
     res.status(404).json({ message: 'Porção não encontrada' });

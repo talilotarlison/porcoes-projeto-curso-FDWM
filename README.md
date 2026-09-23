@@ -12,7 +12,7 @@ O projeto utiliza uma arquitetura **MVC (Model-View-Controller)**, adaptada para
 
 Como a aplicação fornece uma API, não há uma camada de views tradicional. As respostas são retornadas no formato JSON.
 
-> **Observação:** a integração com o SQLite faz parte da camada de persistência planejada. Na implementação atual, as porções ainda são mantidas em memória durante a execução do servidor.
+O banco SQLite é criado automaticamente em `database/porcoes.db` na primeira execução. Esse arquivo é ignorado pelo Git, enquanto a estrutura da tabela e as operações de persistência ficam definidas em `model/porcoes.js`.
 
 ## Tecnologias
 
